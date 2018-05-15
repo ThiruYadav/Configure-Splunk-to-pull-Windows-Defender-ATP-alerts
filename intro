@@ -1,0 +1,11 @@
+One problem I had with SCCM's DB inputs were that they were built for an old version of DB Connect, and using a style that's not even supported any more. So they break and won't pull in data.
+
+If you are reasonably comfortable with SQL, you can open the existing queries from disk (I think in that version they're in the SCCM app's input.conf file?) and use those as a sort of pattern to rebuild them from scratch. Most of the query can be just copied and pasted into a new Database Input, but be careful - IIRC they use a wrapper select that you don't need, line endings may need fixing up, and other things.
+
+Or if you have someone who is a bit more of a DBA, ask them for help - if they are even moderately familiar with SQL they should be able to make this happen pretty quickly - again, they weren't huge structural changes, just a handful of little detail changes to the queries.
+
+To be honest - and maybe we did this at my old $job, I can't remember - it seems like this is a perfect place to build a MS-SQL View for each of those queries, get that working right inside SSMS (SQL Server Management Studio), then just select <field1>, <field2>, ... <fieldn> from <whatever_you_named_the_view> for the DB Connect side of things. That would move all the logic into the view so SQL Server can optimize it, and let Splunk just do a simple query instead of that beast that is there already. BUT if you don't have a DBA team, maybe this isn't the best way because it also moves the logic Splunk needs out of Splunk. So. Maybe not. Of course, this app is very unlikely to be updated.
+
+If you are not so good with SQL and don't have access to someone who is, tonight or tomorrow morning I can likely grab the copies of at least several of those queries from my old job and paste them in here.
+
+Anyway, I hope this helps! If you need those updated queries, just let me know as a comment to this answer and I will grab them when I can. Or someone else will paste them in as a new answer.
